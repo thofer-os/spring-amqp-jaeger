@@ -1,0 +1,6 @@
+
+spring:
+  application:
+    name: amqp-service
+  zipkin:
+    baseUrl: http://collector:9411/

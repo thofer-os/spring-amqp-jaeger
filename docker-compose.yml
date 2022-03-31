@@ -1,0 +1,32 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3.9.13-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  amqp-service:
+    build: .
+    image: amqp-service:latest
+    container_name: 'amqp-service'
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+    depends_on: [rabbitmq, collector]
+    restart: always
+
+  collector:
+    image: jaegertracing/all-in-one
+    container_name: 'jaeger'
+    environment:
+      - COLLECTOR_ZIPKIN_HOST_PORT=9411
+    ports:
+      - "5775:5775"
+      - "6831:6831"
+      - "6832:6832"
+      - "5778:5778"
+      - "16686:16686"
+      - "14250:14250"
+      - "14268:14268"
+      - "14269:14269"
+      - "9411:9411"
